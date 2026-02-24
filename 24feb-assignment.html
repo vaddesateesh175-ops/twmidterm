@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        #products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            position: relative;
+        }
+
+        #products div {
+            width: 150px;
+            text-align: center;
+            box-shadow: 1px 1px 3px 1px;
+            border-radius: 10px;
+            margin: 5px;
+            padding: 5px;
+        }
+        #products div img {
+            width: 100%;
+        }
+
+        #product{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+        #alert{
+             position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        #btn{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+         .blur {
+             filter: blur(5px);
+            }
+    </style>
+</head>
+
+<body>
+   <div id="products">
+
+   </div>
+
+   <div id="alert">
+
+   </div>
+
+   <div id="product">
+     <h3 id="Title"></h3>
+     <p id="p1"></p>
+     <img  id="image">
+     <button id="btn" onclick="close()">close</button>
+     <!-- description -->
+   </div>
+    
+    <script>
+    
+        function genTable(products) {
+            document.getElementById('products').innerHTML=""
+            products.forEach(function (product) {
+                var productcart=document.createElement("div")
+
+                var productimg=document.createElement("img")
+                productimg.src=product.thumbnail
+                productcart.appendChild(productimg)
+
+                var title=document.createElement("h3")
+                title.innerText=product.title
+                productcart.appendChild(title)
+
+                 productcart.onclick = function () {
+                    open(product)
+                 }
+                document.getElementById('products').appendChild(productcart)
+            })
+        }
+
+        function open(product){
+            console.log("hi")
+             document.getElementById("alert").style.display = "block"
+              document.getElementById("product").style.display = "block"
+            document.getElementById("products").classList.add("blur");
+
+            document.getElementById("Title").innerText = product.title
+
+             
+             document.getElementById("p1").innerText=product.description
+             document.getElementById("image").src = product.thumbnail
+             
+        
+
+        }
+
+        function close(){
+              document.getElementById("alert").style.display = "none"
+              document.getElementById("product").style.display = "none"
+             document.getElementById("products").classList.remove("blur");
+        }
+       function getProducts() {
+            fetch("https://dummyjson.com/product?limit=40&skip=")
+            .then(function(res){return res.json()})    
+            .then(function (data) { genTable(data.products); })
+        }
+        getProducts()
+    </script>
+</body>
+
+</html>
