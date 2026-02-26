@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2px">
+        <thead>
+            <th>name</th>
+            <th>calories</th>
+            <th>preparation time</th>
+            <th>cookTimeMinutes</th>
+            <th>rating</th>
+        </thead>
+        <tbody id="d1">
+
+        </tbody>
+
+    </table>
+
+    <button onclick="previes()" id="prevBtn">prev</button>
+
+    <button onclick="nextitems()" >next</button>
+
+    <script>
+        var s=0
+        
+        function genratetable(recipes){
+            document.getElementById("d1").innerHTML=" "
+            recipes.forEach(recipe => {
+                var ntd=document.createElement("tr")
+
+                var ntt=document.createElement("td")
+                ntt.innerText=recipe.name
+                //console.log(ntt)
+                ntd.appendChild(ntt)
+
+                var ntc=document.createElement("td")
+                ntc.innerText=recipe.caloriesPerServing
+                ntd.appendChild(ntc)
+
+                var ntp=document.createElement("td")
+                ntp.innerText=recipe.prepTimeMinutes
+                ntd.appendChild(ntp)
+
+                var nttc=document.createElement("td")
+                nttc.innerText=recipe.cookTimeMinutes
+                ntd.appendChild(nttc)
+
+                var ntr=document.createElement("td")
+                ntr.innerText=recipe.rating
+                ntd.appendChild(ntr)
+
+                document.getElementById("d1").appendChild(ntd)
+            });
+        }
+
+         function genui() {
+            fetch(`https://dummyjson.com/recipes?limit=10&skip=${s}`)
+            .then(function(res){return res.json()})    
+            .then(function (data) { 
+                genratetable(data.recipes); 
+            })
+             if (s <= 0 ) {
+                    document.getElementById("prevBtn").disabled = true;
+                } 
+                else {
+                    document.getElementById("prevBtn").disabled = false;
+                }
+        }
+        genui() 
+       
+        function nextitems(){
+            s = s + 10;
+            genui();
+        }
+    
+        function previes(){
+        
+            s=s-10;
+            genui();
+        }
+    </script>
+</body>
+</html>
